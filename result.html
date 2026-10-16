@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jomilens - Land Verification Result</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">J</div>
+      <div class="brand-text">
+        <h1>Jomilens</h1>
+        <p>"Know the Land, Before You Buy."</p>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="search.html">New Search</a>
+      <button class="lang-switch" id="langBtn" onclick="toggleLang()">English / বাংলা</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="split-layout">
+      <div>
+        <div id="riskBox" class="risk-box risk-safe">
+          <h3 id="riskTitle" style="font-weight: 700;">Loading Verification Status...</h3>
+          <p id="riskDesc" style="font-size: 0.9rem; margin-top: 4px;"></p>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">📌 Land General Information</h3>
+          <div class="info-grid">
+            <div class="info-item"><label>Plot ID</label><span id="resPlotId">-</span></div>
+            <div class="info-item"><label>Dag Number</label><span id="resDag">-</span></div>
+            <div class="info-item"><label>Khatian Number</label><span id="resKhatian">-</span></div>
+            <div class="info-item"><label>Mouza / Location</label><span id="resMouza">-</span></div>
+            <div class="info-item"><label>Plot Area</label><span id="resArea">-</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">👤 Current Owner & Mutation Details</h3>
+          <div class="info-grid">
+            <div class="info-item"><label>Current Recorded Owner</label><span id="resOwner">-</span></div>
+            <div class="info-item"><label>NID Status</label><span id="resNid">-</span></div>
+            <div class="info-item"><label>Mutation Status</label><span id="resMutation">-</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3 class="card-title">📜 Historical Transfer & Mutation Chain</h3>
+          <table class="custom-table">
+            <thead>
+              <tr>
+                <th>Year</th>
+                <th>Event</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody id="historyTableBody">
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card" style="text-align: center;">
+          <h3 class="card-title" style="justify-content: center;">🗺️ GPS Boundary Mapping</h3>
+          <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">View interactive Leaflet GPS boundary coordinates for this plot.</p>
+          <a href="map.html" class="btn btn-success">Open Interactive GPS Map</a>
+        </div>
+      </div>
+
+      <div>
+        <div class="ai-panel">
+          <div class="ai-header">🤖 Jomilens AI Verification Assistant</div>
+          <div class="chat-box" id="chatBox">
+            <div class="msg msg-bot">
+              I have loaded the records for this plot. Ask me any legal questions regarding this verification!
+            </div>
+          </div>
+          <div class="chat-input-area">
+            <input type="text" id="chatInput" class="chat-input" placeholder="Ask about this land..." onkeypress="if(event.key==='Enter') sendAiMessage()">
+            <button class="btn btn-primary" onclick="sendAiMessage()">Send</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p>© 2026 Jomilens - "Know the Land, Before You Buy."</p>
+  </footer>
+
+  <script src="script.js"></script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      let plotId = localStorage.getItem('selectedPlotId') || 'PLOT-102';
+      let data = mockDatabase[plotId] || mockDatabase['PLOT-102'];
+
+      const riskBox = document.getElementById('riskBox');
+      const riskTitle = document.getElementById('riskTitle');
+      const riskDesc = document.getElementById('riskDesc');
+
+      riskTitle.innerText = data.riskTitle;
+      riskDesc.innerText = data.riskDesc;
+
+      riskBox.className = 'risk-box ' + (
+        data.riskLevel === 'SAFE' ? 'risk-safe' :
+        data.riskLevel === 'MEDIUM' ? 'risk-medium' : 'risk-high'
+      );
+
+      document.getElementById('resPlotId').innerText = data.plotId;
+      document.getElementById('resDag').innerText = data.dag;
+      document.getElementById('resKhatian').innerText = data.khatian;
+      document.getElementById('resMouza').innerText = data.mouza;
+      document.getElementById('resArea').innerText = data.area;
+      document.getElementById('resOwner').innerText = data.owner;
+      document.getElementById('resNid').innerText = data.nid;
+      document.getElementById('resMutation').innerText = data.mutationStatus;
+
+      const tbody = document.getElementById('historyTableBody');
+      tbody.innerHTML = '';
+      data.history.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${item.year}</td><td>${item.event}</td><td>${item.detail}</td>`;
+        tbody.appendChild(tr);
+      });
+    });
+  </script>
+</body>
+</html>

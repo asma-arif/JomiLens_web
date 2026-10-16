@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jomilens - "Know the Land, Before You Buy."</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="brand">
+      <div class="logo-icon">J</div>
+      <div class="brand-text">
+        <h1>Jomilens</h1>
+        <p>"Know the Land, Before You Buy."</p>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="search.html">Verify Land</a>
+      <button class="lang-switch" id="langBtn" onclick="toggleLang()">English / বাংলা</button>
+    </div>
+  </header>
+
+  <div class="container">
+    <section class="hero">
+      <h2 id="heroTitle">Know the Land, Before You Buy.</h2>
+      <p id="heroDesc">Bangladesh's premier AI-powered Citizen Pre-Purchase Verification platform. Verify Khatian, Dag numbers, disputes, and acquisition risks instantly.</p>
+      
+      <a href="search.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 14px 28px;">Try for Free / Start Verification</a>
+
+      <div style="margin-top: 2.5rem;">
+        <p style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Try quick demo presets:</p>
+        <div class="preset-pills">
+          <span class="pill" onclick="handleSearch('PLOT-102')">PLOT-102 (Safe Land)</span>
+          <span class="pill" onclick="handleSearch('PLOT-405')">PLOT-405 (Litigation Dispute)</span>
+          <span class="pill" onclick="handleSearch('PLOT-909')">PLOT-909 (Govt Acquired)</span>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    <p>© 2026 Jomilens - LandTech 2026 Innovation Hackathon Entry (Track P5: Citizen Pre-Purchase Verification)</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

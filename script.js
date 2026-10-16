@@ -148,3 +148,113 @@ function sendAiMessage() {
     chatBox.scrollTop = chatBox.scrollHeight;
   }, 600);
 }
+// --- Voice Recognition & Text-to-Speech Features ---
+
+// ১. AI-এর মুখে কথা বলার ফাংশন (Text to Speech)
+function speakText(text) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel(); // আগের কোনো কথা থাকলে তা বন্ধ করবে
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US'; // ভাষা সেট করা
+    utterance.rate = 1.0;
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+// ২. ভয়েস শুনে কথা লেখার ফাংশন (Voice to Text)
+function startVoiceRecognition() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  
+  if (!SpeechRecognition) {
+    alert("Voice search is not supported in your browser. Please use Google Chrome or Edge.");
+    return;
+  }
+
+  const recognition = new SpeechRecognition();
+  recognition.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+  recognition.interimResults = false;
+
+  const micBtn = document.getElementById('micBtn');
+  if (micBtn) micBtn.style.background = '#EF4444'; // মাইক চালু হলে লাল হবে
+
+  recognition.start();
+
+  recognition.onresult = function(event) {
+    const transcript = event.results[0][0].transcript;
+    const input = document.getElementById('chatInput');
+    if (input) {
+      input.value = transcript;
+    }
+    if (micBtn) micBtn.style.background = 'var(--soft-green)';
+    sendAiMessage(); // কথা বলা শেষ হলে স্বয়ংক্রিয়ভাবে মেসেজ সেন্ড হয়ে যাবে
+  };
+
+  recognition.onerror = function() {
+    if (micBtn) micBtn.style.background = 'var(--soft-green)';
+  };
+
+  recognition.onend = function() {
+    if (micBtn) micBtn.style.background = 'var(--soft-green)';
+  };
+}
+
+// ৩. চ্যাট মেসেজ প্রসেসিং ও লোকেশন কমান্ড হ্যান্ডলিং (Updated sendAiMessage)
+function sendAiMessage() {
+  const input = document.getElementById('chatInput');
+  const chatBox = document.getElementById('chatBox');
+  if (!input || !input.value.trim()) return;
+
+  const userMsg = input.value.trim();
+  
+  // ইউজারের মেসেজ স্ক্রিনে দেখান
+  const userDiv = document.createElement('div');
+  userDiv.className = 'msg msg-user';
+  userDiv.innerText = userMsg;
+  chatBox.appendChild(userDiv);
+
+  input.value = '';
+  chatBox.scrollTop = chatBox.scrollHeight;
+
+  setTimeout(() => {
+    const botDiv = document.createElement('div');
+    botDiv.className = 'msg msg-bot';
+    let replyText = "";
+
+    const lower = userMsg.toLowerCase();
+
+    // যদি ইউজার লোকেশন/ম্যাপ দেখতে বলে
+    if (lower.includes('location') || lower.includes('map') || lower.includes('ম্যাপ') || lower.includes('লোকেশন')) {
+      replyText = "Opening interactive GPS boundary map for you right now.";
+      botDiv.innerText = replyText;
+      chatBox.appendChild(botDiv);
+      chatBox.scrollTop = chatBox.scrollHeight;
+      
+      // AI কথা বলবে
+      speakText(replyText);
+
+      // ২ সেকেন্ড পর স্বয়ংক্রিয়ভাবে Map পেজে নিয়ে যাবে
+      setTimeout(() => {
+        window.location.href = 'map.html';
+      }, 2000);
+      return;
+    }
+
+    // সাধারণ অনুসন্ধানের ক্ষেত্রে AI এর উত্তর
+    if (lower.includes('102') || lower.includes('safe')) {
+      replyText = "PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain.";
+    } else if (lower.includes('405') || lower.includes('dispute')) {
+      replyText = "WARNING: PLOT-405 has an active High Court Stay Order. Do not proceed.";
+    } else if (lower.includes('909') || lower.includes('govt')) {
+      replyText = "PLOT-909 is marked under Govt Gazette for Metro Rail Expansion.";
+    } else {
+      replyText = "JomiLens AI: You can ask about land safety, or say 'Show Location' to open GPS Map.";
+    }
+
+    botDiv.innerText = replyText;
+    chatBox.appendChild(botDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // AI উত্তরটি মুখে উচ্চারণ করে বলবে
+    speakText(replyText);
+  }, 600);
+}

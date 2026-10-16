@@ -84,9 +84,10 @@
             </div>
           </div>
           <div class="chat-input-area">
-            <input type="text" id="chatInput" class="chat-input" placeholder="Ask about this land..." onkeypress="if(event.key==='Enter') sendAiMessage()">
-            <button class="btn btn-primary" onclick="sendAiMessage()">Send</button>
-          </div>
+  <button class="btn" id="micBtn" onclick="startVoiceRecognition()" style="background: var(--soft-green); color: white; padding: 8px 12px;" title="Voice Search">🎤</button>
+  <input type="text" id="chatInput" class="chat-input" placeholder="Ask or speak to AI agent..." onkeypress="if(event.key==='Enter') sendAiMessage()">
+  <button class="btn btn-primary" onclick="sendAiMessage()">Send</button>
+</div>
         </div>
       </div>
     </div>

@@ -77,16 +77,19 @@ const translations = {
   }
 };
 
-// Default language set to Bangla
+// Default Language is Bangla
 let currentLang = 'bn';
 
 // Language Toggle Function
 function toggleLanguage() {
   currentLang = currentLang === 'bn' ? 'en' : 'bn';
+  
+  // Button-er lekha poriborton
   const langBtn = document.getElementById('langBtn');
   if (langBtn) {
     langBtn.innerText = currentLang === 'bn' ? 'English' : 'বাংলা';
   }
+  
   updatePageLanguage();
 }
 
@@ -95,17 +98,20 @@ function updatePageLanguage() {
   const elements = document.querySelectorAll('[data-bn]');
   elements.forEach(el => {
     if (currentLang === 'bn') {
-      if (!el.dataset.en) el.dataset.en = el.innerText;
-      el.innerText = el.dataset.bn;
+      if (el.dataset.bn) el.innerText = el.dataset.bn;
     } else {
       if (el.dataset.en) el.innerText = el.dataset.en;
     }
   });
 }
 
-// Page load holei default bangla text load hobe
+// Page load holei default vabe Bangla set hobe
 document.addEventListener('DOMContentLoaded', () => {
   updatePageLanguage();
+  const langBtn = document.getElementById('langBtn');
+  if (langBtn) {
+    langBtn.innerText = 'English';
+  }
 });
 
 function handleSearch(plotIdInput) {

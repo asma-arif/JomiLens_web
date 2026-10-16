@@ -77,27 +77,36 @@ const translations = {
   }
 };
 
-let currentLang = 'en';
+// Default language set to Bangla
+let currentLang = 'bn';
 
-function toggleLang() {
-  currentLang = currentLang === 'en' ? 'bn' : 'en';
+// Language Toggle Function
+function toggleLanguage() {
+  currentLang = currentLang === 'bn' ? 'en' : 'bn';
   const langBtn = document.getElementById('langBtn');
-  if (langBtn) langBtn.innerText = currentLang === 'en' ? 'English / বাংলা' : 'বাংলা / English';
-
-  const t = translations[currentLang];
-  
-  const heroTitle = document.getElementById('heroTitle');
-  if (heroTitle) heroTitle.innerText = t.heroTitle;
-
-  const heroDesc = document.getElementById('heroDesc');
-  if (heroDesc) heroDesc.innerText = t.heroDesc;
-
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) searchInput.placeholder = t.searchPlaceholder;
-
-  const warningText = document.getElementById('searchWarningText');
-  if (warningText) warningText.innerText = t.warningText;
+  if (langBtn) {
+    langBtn.innerText = currentLang === 'bn' ? 'English' : 'বাংলা';
+  }
+  updatePageLanguage();
 }
+
+// Update Text on Page based on Language
+function updatePageLanguage() {
+  const elements = document.querySelectorAll('[data-bn]');
+  elements.forEach(el => {
+    if (currentLang === 'bn') {
+      if (!el.dataset.en) el.dataset.en = el.innerText;
+      el.innerText = el.dataset.bn;
+    } else {
+      if (el.dataset.en) el.innerText = el.dataset.en;
+    }
+  });
+}
+
+// Page load holei default bangla text load hobe
+document.addEventListener('DOMContentLoaded', () => {
+  updatePageLanguage();
+});
 
 function handleSearch(plotIdInput) {
   const plotId = (plotIdInput || document.getElementById('searchInput')?.value || '').trim().toUpperCase();

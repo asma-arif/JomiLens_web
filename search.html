@@ -10,6 +10,23 @@
 <body>
 
   <header class="navbar">
+    <header class="navbar">
+  <a href="index.html" class="brand">
+    <div class="logo-icon">
+      <img src="logo.png" alt="JomiLens Logo">
+    </div>
+    <div class="brand-text">
+      <h1>JomiLens</h1>
+      <p data-bn="জমির তথ্য জানুন, কেনার আগেই।" data-en="Know the Land, Before You Buy.">জমির তথ্য জানুন, কেনার আগেই।</p>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html" data-bn="হোম" data-en="Home">হোম</a>
+    <a href="search.html" data-bn="জমি যাচাই" data-en="Verify Land">জমি যাচাই</a>
+    <a href="map.html" data-bn="জিপিএস ম্যাপ" data-en="GPS Map">জিপিএস ম্যাপ</a>
+    <button class="btn btn-outline" id="langBtn" onclick="toggleLanguage()">English</button>
+  </nav>
+</header>
     <a href="index.html" class="brand">
   <div class="logo-icon">
     <img src="logo.png" alt="JomiLens Logo">
@@ -36,9 +53,13 @@
           </p>
 
           <div class="search-box">
-            <input type="text" id="searchInput" class="search-input" placeholder="Enter Plot ID (e.g. PLOT-102, PLOT-405, PLOT-909)">
-            <button class="btn btn-primary" onclick="handleSearch()">Search</button>
-          </div>
+  <h3 data-bn="প্লট নাম্বার দিয়ে খুঁজুন" data-en="Search by Plot Number">প্লট নাম্বার দিয়ে খুঁজুন</h3>
+  <div class="chat-input-area">
+    <button class="btn" id="micBtn" onclick="startVoiceRecognition()" style="background: var(--soft-green); color: white; padding: 8px 12px;" title="ভয়েস সার্চ">🎤</button>
+    <input type="text" id="chatInput" class="chat-input" placeholder="প্লট নাম্বার লিখুন বা বলুন (যেমন: PLOT-102)..." onkeypress="if(event.key==='Enter') sendAiMessage()">
+    <button class="btn btn-primary" onclick="sendAiMessage()" data-bn="অনুসন্ধান" data-en="Send">অনুসন্ধান</button>
+  </div>
+</div>
 
           <div id="searchWarning" class="warning-alert">
             <span id="searchWarningText">⚠️ Please enter a valid Plot ID, Dag, or Khatian number before searching!</span>

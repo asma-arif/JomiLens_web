@@ -10,6 +10,23 @@
 <body>
 
   <header class="navbar">
+    <header class="navbar">
+  <a href="index.html" class="brand">
+    <div class="logo-icon">
+      <img src="logo.png" alt="JomiLens Logo">
+    </div>
+    <div class="brand-text">
+      <h1>JomiLens</h1>
+      <p data-bn="জমির তথ্য জানুন, কেনার আগেই।" data-en="Know the Land, Before You Buy.">জমির তথ্য জানুন, কেনার আগেই।</p>
+    </div>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html" data-bn="হোম" data-en="Home">হোম</a>
+    <a href="search.html" data-bn="জমি যাচাই" data-en="Verify Land">জমি যাচাই</a>
+    <a href="map.html" data-bn="জিপিএস ম্যাপ" data-en="GPS Map">জিপিএস ম্যাপ</a>
+    <button class="btn btn-outline" id="langBtn" onclick="toggleLanguage()">English</button>
+  </nav>
+</header>
     <a href="index.html" class="brand">
   <div class="logo-icon">
     <img src="logo.png" alt="JomiLens Logo">
@@ -28,20 +45,10 @@
 
   <div class="container">
     <section class="hero">
-      <h2 id="heroTitle">Know the Land, Before You Buy.</h2>
-      <p id="heroDesc">Bangladesh's premier AI-powered Citizen Pre-Purchase Verification platform. Verify Khatian, Dag numbers, disputes, and acquisition risks instantly.</p>
-      
-      <a href="search.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 14px 28px;">Try for Free / Start Verification</a>
-
-      <div style="margin-top: 2.5rem;">
-        <p style="font-size: 0.9rem; color: var(--text-muted); font-weight: 600;">Try quick demo presets:</p>
-        <div class="preset-pills">
-          <span class="pill" onclick="handleSearch('PLOT-102')">PLOT-102 (Safe Land)</span>
-          <span class="pill" onclick="handleSearch('PLOT-405')">PLOT-405 (Litigation Dispute)</span>
-          <span class="pill" onclick="handleSearch('PLOT-909')">PLOT-909 (Govt Acquired)</span>
-        </div>
-      </div>
-    </section>
+  <h2 data-bn="নিরাপদ জমি কিনুন, নিশ্চিন্ত থাকুন" data-en="Buy Safe Land, Stay Secure">নিরাপদ জমি কিনুন, নিশ্চিন্ত থাকুন</h2>
+  <p data-bn="JomiLens দিয়ে সহজেই যাচাই করুন জমির মালিকানা, নামজারি, মামলা ও খাস জমিন সংক্রান্ত তথ্য।" data-en="Verify land ownership, mutation history, legal disputes, and acquisition status effortlessly with JomiLens.">JomiLens দিয়ে সহজেই যাচাই করুন জমির মালিকানা, নামজারি, মামলা ও খাস জমিন সংক্রান্ত তথ্য।</p>
+  <a href="search.html" class="btn btn-primary" data-bn="এখনই অনুসন্ধান করুন 🔍" data-en="Start Verification 🔍">এখনই অনুসন্ধান করুন 🔍</a>
+</section>
   </div>
 
   <footer>

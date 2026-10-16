@@ -55,18 +55,11 @@ body {
   color: white;
 }
 
-.logo-icon {
-  width: 40px;
-  height: 40px;
-  background: var(--teal);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 700;
-  font-size: 1.2rem;
-  color: white;
-  border: 2px solid var(--soft-green);
+.brand-logo-img {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  border-radius: 6px;
 }
 
 .brand-text h1 {

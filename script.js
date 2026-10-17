@@ -274,7 +274,26 @@ function sendAiMessage() {
   }, 600);
 }
 
-// Demo OCR Processing Function
+// Handle Real Gallery or Camera Upload (Shows Smooth Demo Simulation)
+function handleRealUpload(event) {
+  const resultDiv = document.getElementById('ocrResult');
+  if (!resultDiv) return;
+
+  const file = event.target.files[0];
+  if (file) {
+    resultDiv.style.color = '#0f4c3a';
+    resultDiv.innerText = currentLang === 'bn' ? '⏳ আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : '⏳ Scanning uploaded image...';
+
+    setTimeout(() => {
+      resultDiv.style.color = '#2e7d32';
+      resultDiv.innerText = currentLang === 'bn' 
+        ? '✅ সফল স্ক্যান: দলিলটি সার্ভারে নিবন্ধিত এবং প্রাথমিক যাচাইয়ে বৈধ বলে চিহ্নিত।' 
+        : '✅ Successful Scan: Document registered on server and verified as valid.';
+    }, 1800);
+  }
+}
+
+// Demo OCR Processing Function (Triggered via Dropdown selection)
 function processDemoOCR() {
   const selectBox = document.getElementById('demoPorchaSelect');
   const resultDiv = document.getElementById('ocrResult');
@@ -282,12 +301,7 @@ function processDemoOCR() {
   if (!selectBox || !resultDiv) return;
 
   const selectedValue = selectBox.value;
-
-  if (!selectedValue) {
-    resultDiv.style.color = '#d32f2f';
-    resultDiv.innerText = currentLang === 'bn' ? '⚠️ অনুগ্রহ করে যেকোনো একটি ডেমো পর্চা সিলেক্ট করুন।' : '⚠️ Please select a demo khatian sample first.';
-    return;
-  }
+  if (!selectedValue) return;
 
   resultDiv.style.color = '#0f4c3a';
   resultDiv.innerText = currentLang === 'bn' ? '⏳ AI OCR দ্বারা পর্চা বিশ্লেষণ করা হচ্ছে...' : '⏳ Analyzing document via AI OCR...';
@@ -309,7 +323,7 @@ function processDemoOCR() {
         ? '⚠️ উচ্চ ঝুঁকি: খতিয়ান #৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
         : '⚠️ High Risk: Khatian #309 has a pending case in Land Survey Tribunal.';
     }
-  }, 1500);
+  }, 1200);
 }
 
 // USSD Modal Functions

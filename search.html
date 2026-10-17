@@ -118,6 +118,35 @@
   <button class="btn btn-primary" onclick="sendAiMessage()">Send</button>
 </div>
         </div>
+        <!-- Feature 1: Porcha OCR Scanner (Camera, Gallery & Demo) -->
+  <div class="card" style="padding: 20px; border-radius: 10px; background: #f8faf9; border: 1px solid #0f4c3a; margin-top: 25px;">
+    <h4 data-bn="📄 খতিয়ান/পর্চা AI স্ক্যানার" data-en="📄 Khatian Document AI Scanner">📄 খতিয়ান/পর্চা AI স্ক্যানার</h4>
+    <p style="font-size: 0.85rem; color: #555;" data-bn="সরাসরি ক্যামেরা দিয়ে ছবি তুলুন, গ্যালারি থেকে আপলোড করুন অথবা ডেমো টেস্ট করুন।" data-en="Capture live photo, upload from gallery, or test via demo.">সরাসরি ক্যামেরা দিয়ে ছবি তুলুন, গ্যালারি থেকে আপলোড করুন অথবা ডেমো টেস্ট করুন.</p>
+    
+    <!-- Real Input Options (Camera & Gallery) -->
+    <div style="display: flex; gap: 10px; margin-top: 10px;">
+      <!-- Gallery Upload Input -->
+      <input type="file" id="galleryInput" accept="image/*" style="display: none;" onchange="handleRealUpload(event)">
+      <button class="btn btn-outline" onclick="document.getElementById('galleryInput').click()" style="flex: 1; font-size: 0.8rem; border-color: #0f4c3a; color: #0f4c3a;" data-bn="📁 গ্যালারি থেকে" data-en="📁 Gallery">📁 গ্যালারি থেকে</button>
+
+      <!-- Direct Camera Capture Input -->
+      <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;" onchange="handleRealUpload(event)">
+      <button class="btn btn-primary" onclick="document.getElementById('cameraInput').click()" style="flex: 1; font-size: 0.8rem;" data-bn="📸 ক্যামেরা দিয়ে তুলুন" data-en="📸 Live Camera">📸 ক্যামেরা দিয়ে তুলুন</button>
+    </div>
+
+    <div style="text-align: center; margin: 10px 0; font-size: 0.8rem; color: #777; font-weight: bold;">--- অথবা ডেমো টেস্ট করুন ---</div>
+
+    <!-- Quick Demo Samples Dropdown -->
+    <select id="demoPorchaSelect" style="width: 100%; padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem;" onchange="processDemoOCR()">
+      <option value="" data-bn="-- একটি ডেমো পর্চা বেছে নিন --" data-en="-- Select a Demo Khatian --">-- একটি ডেমো পর্চা বেছে নিন --</option>
+      <option value="genuine" data-bn="📄 ডেমো ১: আসল খতিয়ান (#৫০২ - নিরাপদ)" data-en="📄 Demo 1: Genuine Khatian (#502 - Safe)">📄 ডেমো ১: আসল খতিয়ান (#৫০২ - নিরাপদ)</option>
+      <option value="tampered" data-bn="📄 ডেমো ২: জালিয়াতি করা খতিয়ান (#১০৫ - ভুয়া)" data-en="📄 Demo 2: Tampered Khatian (#105 - Forged)">📄 ডেমো ২: জালিয়াতি করা খতিয়ান (#১০৫ - ভুয়া)</option>
+      <option value="disputed" data-bn="📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)" data-en="📄 Demo 3: Disputed Khatian (#309 - Court Stay)">📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)</option>
+    </select>
+    
+    <!-- OCR Result Box -->
+    <div id="ocrResult" style="margin-top: 12px; font-weight: bold; font-size: 0.85rem; line-height: 1.4;"></div>
+  </div>
       </div>
     </div>
   </div>

@@ -68,7 +68,7 @@ const translations = {
     heroDesc: "Bangladesh's premier AI-powered Citizen Pre-Purchase Verification platform.",
     searchBtn: "Search Verification",
     searchPlaceholder: "Enter Plot ID (e.g. PLOT-102, PLOT-405, PLOT-909)",
-    warningText: "⚠️ Please enter a valid Plot ID, Dag, or Khatian number before searching!",
+    warningText: "Please enter a valid Plot ID, Dag, or Khatian number before searching!",
     aiHeader: "Jomilens AI Assistant",
     aiWelcome: "Hello! I am your Jomilens AI Legal Advisor. Ask me anything about land records, mutations, or verification status."
   },
@@ -77,7 +77,7 @@ const translations = {
     heroDesc: "বাংলাদেশের প্রথম এআই-চালিত নাগরিক ভূমি প্রাক-ক্রয় যাচাইকরণ প্ল্যাটফর্ম।",
     searchBtn: "যাচাই করুন",
     searchPlaceholder: "প্লট আইডি লিখুন (যেমন: PLOT-102, PLOT-405, PLOT-909)",
-    warningText: "⚠️ অনুসন্ধানের আগে একটি বৈধ প্লট আইডি, দাগ বা খতিয়ান নম্বর প্রদান করুন!",
+    warningText: "অনুসন্ধানের আগে একটি বৈধ প্লট আইডি, দাগ বা খতিয়ান নম্বর প্রদান করুন!",
     aiHeader: "জমিলেন্স এআই সহকারী",
     aiWelcome: "হ্যালো! আমি আপনার জমিলেন্স আইনি সহকারী। খতিয়ান, নামজারি বা ভূমি বিষয়ক প্রশ্ন করতে পারেন।"
   }
@@ -137,12 +137,16 @@ function handleSearch(plotIdInput) {
 }
 
 // ==========================================
-// 5. Voice Recognition & Text-to-Speech
+// 5. Voice Recognition & Clean Text-to-Speech
 // ==========================================
 function speakText(text) {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
+    
+    // ইমোজি বা অনাকাঙ্ক্ষিত সিম্বল ফিল্টার করে কথা বলাবে
+    const cleanSpeechText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2300}-\u{23FF}]/gu, '');
+    
+    const utterance = new SpeechSynthesisUtterance(cleanSpeechText.trim());
     utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
     utterance.rate = 1.0;
     window.speechSynthesis.speak(utterance);
@@ -214,7 +218,7 @@ function sendAiMessage() {
     // 1. Map & Location Query Handling
     if (lower.includes('location') || lower.includes('map') || lower.includes('ম্যাপ') || lower.includes('লোকেশন') || lower.includes('সীমানা')) {
       replyText = currentLang === 'bn' 
-        ? "আপনার জন্য স্যাটেলাইট এবং জিপিএস ম্যাপ খোলা হচ্ছে..." 
+        ? "আপনার জন্য স্যাটেলাইট এবং জিপিএস ম্যাপ খোলা হচ্ছে।" 
         : "Opening interactive GPS boundary map for you right now.";
       botDiv.innerText = replyText;
       chatBox.appendChild(botDiv);
@@ -231,24 +235,24 @@ function sendAiMessage() {
     // 2. Plot Status Query Handling
     if (lower.includes('102') || lower.includes('৫০২') || lower.includes('safe')) {
       replyText = currentLang === 'bn'
-        ? "✅ PLOT-102 সম্পূর্ণ নিরাপদ। এটি মোহাম্মদ তানভীর হোসেনের নামে নিবন্ধিত ও খতিয়ান হালনাগাদ রয়েছে।"
-        : "✅ PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain with clear mutation records.";
+        ? "প্লট ১০২ সম্পূর্ণ নিরাপদ। এটি মোহাম্মদ তানভীর হোসেনের নামে নিবন্ধিত ও খতিয়ান হালনাগাদ রয়েছে।"
+        : "PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain with clear mutation records.";
     } else if (lower.includes('405') || lower.includes('১০৫') || lower.includes('dispute') || lower.includes('litigation') || lower.includes('মামলা')) {
       replyText = currentLang === 'bn'
-        ? "🚨 সতর্কতা: PLOT-405 এ দেওয়ানি আদালতে (Civil Suit #104/2022) মামলা ও স্থগিতাদেশ চলছে। কেনা ঝুঁকিপূর্ণ।"
-        : "🚨 WARNING: PLOT-405 has an active High Court Stay Order (Civil Suit #104/2022). Do not proceed without legal settlement.";
+        ? "সতর্কতা: প্লট ৪০৫ এ দেওয়ানি আদালতে মামলা ও স্থগিতাদেশ চলছে। কেনা ঝুঁকিপূর্ণ।"
+        : "WARNING: PLOT-405 has an active High Court Stay Order. Do not proceed without legal settlement.";
     } else if (lower.includes('909') || lower.includes('৩০৯') || lower.includes('govt') || lower.includes('acquired') || lower.includes('খাস')) {
       replyText = currentLang === 'bn'
-        ? "⚠️ PLOT-909 মেট্রো রেল সম্প্রসারণের জন্য সরকারি গ্যাজেট #৮৮১ অনুযায়ী অধিগ্রহণকৃত সম্পত্তি।"
-        : "⚠️ PLOT-909 is marked under Govt Gazette #881 for Metro Rail Expansion. It is not available for private transfer.";
+        ? "প্লট ৯০৯ মেট্রো রেল সম্প্রসারণের জন্য সরকারি গ্যাজেট ৮৮১ অনুযায়ী অধিগ্রহণকৃত সম্পত্তি।"
+        : "PLOT-909 is marked under Govt Gazette 881 for Metro Rail Expansion. It is not available for private transfer.";
     } else if (lower.includes('খতিয়ান') || lower.includes('পর্চা') || lower.includes('khatian') || lower.includes('porcha')) {
       replyText = currentLang === 'bn'
-        ? "📄 খতিয়ান স্ট্যাটাস: ডাটাবেজে তথ্য পাওয়া গেছে। সম্পূর্ণ খতিয়ান স্ক্যান ও ভ্যালিডেশনের জন্য AI OCR ব্যবহার করুন।"
-        : "📄 Khatian Status: Record found in database. Use AI OCR Scanner to validate seals and signatures.";
+        ? "খতিয়ান স্ট্যাটাস: ডাটাবেজে তথ্য পাওয়া গেছে। সম্পূর্ণ খতিয়ান স্ক্যান ও ভ্যালিডেশনের জন্য এআই ওসিআর ব্যবহার করুন।"
+        : "Khatian Status: Record found in database. Use AI OCR Scanner to validate seals and signatures.";
     } else {
       replyText = currentLang === 'bn'
-        ? "🤖 জমিলেন্স এআই: আপনি প্লটের স্ট্যাটাস (যেমন: PLOT-102, 405, 909), খতিয়ান বিবরণ জানতে পারেন অথবা 'ম্যাপ দেখাও' বলতে পারেন।"
-        : "🤖 JomiLens AI: You can ask about land safety (e.g. PLOT-102, 405, 909), Khatian status, or say 'Show Location' to open GPS Map.";
+        ? "জমিলেন্স এআই: আপনি প্লটের স্ট্যাটাস (যেমন: প্লট ১০২, ৪০৫, ৯০৯), খতিয়ান বিবরণ জানতে পারেন অথবা ম্যাপ দেখাও বলতে পারেন।"
+        : "JomiLens AI: You can ask about land safety (e.g. PLOT-102, 405, 909), Khatian status, or say Show Location to open GPS Map.";
     }
 
     botDiv.innerText = replyText;
@@ -269,13 +273,13 @@ function handleRealUpload(event) {
   const file = event.target.files[0];
   if (file) {
     resultDiv.style.color = '#0f4c3a';
-    resultDiv.innerText = currentLang === 'bn' ? '⏳ আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : '⏳ Scanning uploaded image...';
+    resultDiv.innerText = currentLang === 'bn' ? 'আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : 'Scanning uploaded image...';
 
     setTimeout(() => {
       resultDiv.style.color = '#2e7d32';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
-        : '✅ Successful Scan: Uploaded document registered on server and verified as valid.';
+        ? 'সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত।' 
+        : 'Successful Scan: Uploaded document registered on server and verified as valid.';
     }, 1600);
   }
 }
@@ -290,24 +294,24 @@ function processDemoOCR() {
   if (!selectedValue) return;
 
   resultDiv.style.color = '#0f4c3a';
-  resultDiv.innerText = currentLang === 'bn' ? '⏳ AI OCR দ্বারা পর্চা বিশ্লেষণ করা হচ্ছে...' : '⏳ Analyzing document via AI OCR...';
+  resultDiv.innerText = currentLang === 'bn' ? 'এআই ওসিআর দ্বারা পর্চা বিশ্লেষণ করা হচ্ছে...' : 'Analyzing document via AI OCR...';
 
   setTimeout(() => {
     if (selectedValue === 'genuine') {
       resultDiv.style.color = '#2e7d32';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ ফলাফল: খতিয়ান #৫০২ শতভাগ আসল। সিল ও স্বাক্ষর ভ্যালিডেটেড।' 
-        : '✅ Result: Khatian #502 is 100% Genuine. Seal & Signature Validated.';
+        ? 'ফলাফল: খতিয়ান ৫০২ শতভাগ আসল। সিল ও স্বাক্ষর ভ্যালিডেটেড।' 
+        : 'Result: Khatian 502 is 100% Genuine. Seal & Signature Validated.';
     } else if (selectedValue === 'tampered') {
       resultDiv.style.color = '#d32f2f';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '❌ সতর্কতা: খতিয়ান #১০৫ এ অসঙ্গতি পাওয়া গেছে! দাগ নম্বর টেম্পারড বা এডিট করা।' 
-        : '❌ Alert: Khatian #105 shows tampering! Plot numbers modified.';
+        ? 'সতর্কতা: খতিয়ান ১০৫ এ অসঙ্গতি পাওয়া গেছে! দাগ নম্বর টেম্পারড বা এডিট করা।' 
+        : 'Alert: Khatian 105 shows tampering! Plot numbers modified.';
     } else if (selectedValue === 'disputed') {
       resultDiv.style.color = '#e65100';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '⚠️ উচ্চ ঝুঁকি: খতিয়ান #৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
-        : '⚠️ High Risk: Khatian #309 has a pending case in Land Survey Tribunal.';
+        ? 'উচ্চ ঝুঁকি: খতিয়ান ৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
+        : 'High Risk: Khatian 309 has a pending case in Land Survey Tribunal.';
     }
   }, 1200);
 }

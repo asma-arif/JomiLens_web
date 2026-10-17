@@ -83,7 +83,7 @@ const translations = {
   }
 };
 
-let currentLang = 'bn'; // Default Language
+let currentLang = 'bn'; // Default Language is Bangla
 
 // ==========================================
 // 3. Language Switching Functions
@@ -141,14 +141,19 @@ function handleSearch(plotIdInput) {
 // ==========================================
 function speakText(text) {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
+    window.speechSynthesis.cancel(); // আগের কোনো সাউন্ড চালু থাকলে বন্ধ করবে
     
-    // ইমোজি বা অনাকাঙ্ক্ষিত সিম্বল ফিল্টার করে কথা বলাবে
-    const cleanSpeechText = text.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2300}-\u{23FF}]/gu, '');
-    
-    const utterance = new SpeechSynthesisUtterance(cleanSpeechText.trim());
+    // ইমোজি, স্টিকার ও অনাকাঙ্ক্ষিত সাইরেন বা টিক চিহ্ন ফিল্টার করার লজিক
+    let cleanSpeechText = text
+      .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2300}-\u{23FF}]/gu, '')
+      .replace(/[✅🚨⚠️❌🟢🔴🟠📄🤖🔍]/g, '') // ইমোজি উচ্চারণ বন্ধের ফিল্টার
+      .trim();
+
+    const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
     utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
-    utterance.rate = 1.0;
+    utterance.rate = 0.95; // স্পষ্ট শোনার জন্য সামান্য ধীর গতি
+    utterance.pitch = 1.0;
+    
     window.speechSynthesis.speak(utterance);
   }
 }
@@ -157,16 +162,17 @@ function startVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   
   if (!SpeechRecognition) {
-    alert("Voice search is not supported in your browser. Please use Google Chrome or Edge.");
+    alert("আপনার ব্রাউজারে ভয়েস সার্চ সাপোর্ট করছে না। অনুগ্রহ করে Google Chrome বা Edge ব্যবহার করুন।");
     return;
   }
 
   const recognition = new SpeechRecognition();
   recognition.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
   recognition.interimResults = false;
+  recognition.maxAlternatives = 1;
 
   const micBtn = document.getElementById('micBtn');
-  if (micBtn) micBtn.style.background = '#EF4444';
+  if (micBtn) micBtn.style.background = '#EF4444'; // মাইক চালু হলে লাল বাটন
 
   recognition.start();
 
@@ -176,16 +182,16 @@ function startVoiceRecognition() {
     if (input) {
       input.value = transcript;
     }
-    if (micBtn) micBtn.style.background = 'var(--soft-green)';
-    sendAiMessage();
+    if (micBtn) micBtn.style.background = 'var(--soft-green, #10B981)';
+    sendAiMessage(); // কথা শেষ হলে স্বয়ংক্রিয়ভাবে মেসেজ সেন্ড হবে
   };
 
   recognition.onerror = function() {
-    if (micBtn) micBtn.style.background = 'var(--soft-green)';
+    if (micBtn) micBtn.style.background = 'var(--soft-green, #10B981)';
   };
 
   recognition.onend = function() {
-    if (micBtn) micBtn.style.background = 'var(--soft-green)';
+    if (micBtn) micBtn.style.background = 'var(--soft-green, #10B981)';
   };
 }
 
@@ -199,7 +205,7 @@ function sendAiMessage() {
 
   const userMsg = input.value.trim();
   
-  // Display User Message
+  // ইউজারের মেসেজ স্ক্রিনে দেখানো
   const userDiv = document.createElement('div');
   userDiv.className = 'msg msg-user';
   userDiv.innerText = userMsg;
@@ -215,11 +221,12 @@ function sendAiMessage() {
 
     const lower = userMsg.toLowerCase();
 
-    // 1. Map & Location Query Handling
+    // ১. ম্যাপ/লোকেশন অনুসন্ধান
     if (lower.includes('location') || lower.includes('map') || lower.includes('ম্যাপ') || lower.includes('লোকেশন') || lower.includes('সীমানা')) {
       replyText = currentLang === 'bn' 
         ? "আপনার জন্য স্যাটেলাইট এবং জিপিএস ম্যাপ খোলা হচ্ছে।" 
         : "Opening interactive GPS boundary map for you right now.";
+      
       botDiv.innerText = replyText;
       chatBox.appendChild(botDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
@@ -232,35 +239,36 @@ function sendAiMessage() {
       return;
     }
 
-    // 2. Plot Status Query Handling
-    if (lower.includes('102') || lower.includes('৫০২') || lower.includes('safe')) {
+    // ২. প্লট ও খতিয়ান অনুসন্ধান (শুধু পরিচ্ছন্ন তথ্য ভিত্তিক রেসপন্স)
+    if (lower.includes('102') || lower.includes('১০২') || lower.includes('safe') || lower.includes('নিরাপদ')) {
       replyText = currentLang === 'bn'
-        ? "প্লট ১০২ সম্পূর্ণ নিরাপদ। এটি মোহাম্মদ তানভীর হোসেনের নামে নিবন্ধিত ও খতিয়ান হালনাগাদ রয়েছে।"
+        ? "প্লট ১০২ সম্পূর্ণ নিরাপদ। এটি মোহাম্মদ তানভীর হোসেনের নামে নিবন্ধিত এবং নামজারি ও খতিয়ান হালনাগাদ রয়েছে।"
         : "PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain with clear mutation records.";
-    } else if (lower.includes('405') || lower.includes('১০৫') || lower.includes('dispute') || lower.includes('litigation') || lower.includes('মামলা')) {
+    } else if (lower.includes('405') || lower.includes('৪০৫') || lower.includes('dispute') || lower.includes('মামলা')) {
       replyText = currentLang === 'bn'
-        ? "সতর্কতা: প্লট ৪০৫ এ দেওয়ানি আদালতে মামলা ও স্থগিতাদেশ চলছে। কেনা ঝুঁকিপূর্ণ।"
+        ? "সতর্কতা: প্লট ৪০৫ এ দেওয়ানি আদালতে মামলা ও স্থগিতাদেশ চলছে। আইনি নিষ্পত্তি ছাড়া লেনদেন ঝুঁকিপূর্ণ।"
         : "WARNING: PLOT-405 has an active High Court Stay Order. Do not proceed without legal settlement.";
-    } else if (lower.includes('909') || lower.includes('৩০৯') || lower.includes('govt') || lower.includes('acquired') || lower.includes('খাস')) {
+    } else if (lower.includes('909') || lower.includes('৯০৯') || lower.includes('govt') || lower.includes('অধিগ্রহণ') || lower.includes('খাস')) {
       replyText = currentLang === 'bn'
         ? "প্লট ৯০৯ মেট্রো রেল সম্প্রসারণের জন্য সরকারি গ্যাজেট ৮৮১ অনুযায়ী অধিগ্রহণকৃত সম্পত্তি।"
         : "PLOT-909 is marked under Govt Gazette 881 for Metro Rail Expansion. It is not available for private transfer.";
     } else if (lower.includes('খতিয়ান') || lower.includes('পর্চা') || lower.includes('khatian') || lower.includes('porcha')) {
       replyText = currentLang === 'bn'
-        ? "খতিয়ান স্ট্যাটাস: ডাটাবেজে তথ্য পাওয়া গেছে। সম্পূর্ণ খতিয়ান স্ক্যান ও ভ্যালিডেশনের জন্য এআই ওসিআর ব্যবহার করুন।"
+        ? "খতিয়ান স্ট্যাটাস: ডাটাবেজে রেকর্ড সক্রিয় রয়েছে। সম্পূর্ণ যাচাইয়ের জন্য দলিল আপলোড বা স্ক্যান করুন।"
         : "Khatian Status: Record found in database. Use AI OCR Scanner to validate seals and signatures.";
     } else {
       replyText = currentLang === 'bn'
-        ? "জমিলেন্স এআই: আপনি প্লটের স্ট্যাটাস (যেমন: প্লট ১০২, ৪০৫, ৯০৯), খতিয়ান বিবরণ জানতে পারেন অথবা ম্যাপ দেখাও বলতে পারেন।"
-        : "JomiLens AI: You can ask about land safety (e.g. PLOT-102, 405, 909), Khatian status, or say Show Location to open GPS Map.";
+        ? "জমিলেন্স এআই: আপনি প্লটের স্ট্যাটাস যেমন প্লট ১০২, ৪০৫ বা ৯০৯ সম্পর্কে জানতে পারেন অথবা ম্যাপ দেখাও বলতে পারেন।"
+        : "JomiLens AI: You can ask about land safety like PLOT-102, 405, 909, Khatian status, or say Show Location.";
     }
 
     botDiv.innerText = replyText;
     chatBox.appendChild(botDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
+    // AI উত্তরটি মুখে বলবে (ইমোজি ছাড়া)
     speakText(replyText);
-  }, 600);
+  }, 500);
 }
 
 // ==========================================

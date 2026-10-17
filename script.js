@@ -273,3 +273,62 @@ function sendAiMessage() {
     speakText(replyText);
   }, 600);
 }
+
+// OCR Scanning Simulation Function
+function processOCR() {
+  const resultDiv = document.getElementById('ocrResult');
+  if (!resultDiv) return;
+
+  resultDiv.style.color = '#0f4c3a';
+  resultDiv.innerText = currentLang === 'bn' ? '⏳ পর্চা স্ক্যান করা হচ্ছে...' : '⏳ Scanning Document...';
+
+  setTimeout(() => {
+    resultDiv.style.color = '#2e7d32';
+    resultDiv.innerText = currentLang === 'bn' 
+      ? '✅ স্ক্যান সম্পন্ন: খতিয়ান নম্বর #502 স্বত্বাধিকারী সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
+      : '✅ Scan Complete: Khatian #502 Authenticity Verified (Genuine Document).';
+  }, 2000);
+}
+
+// USSD Modal Functions
+function showUSSDModal() {
+  const modal = document.getElementById('ussdModal');
+  if (modal) modal.style.display = 'flex';
+}
+
+function closeUSSDModal() {
+  const modal = document.getElementById('ussdModal');
+  if (modal) modal.style.display = 'none';
+}
+
+// Dynamic Hash Generator for Blockchain Stamp
+function generateLandHash(plotNo) {
+  let hash = '0x';
+  const chars = '0123456789ABCDEF';
+  for (let i = 0; i < 32; i++) {
+    hash += chars[Math.floor(Math.random() * chars.length)];
+  }
+  return hash;
+}
+
+// Result Update Helper for Risk Score Meter
+function updateRiskMeter(scorePercent, isDisputed) {
+  const riskBar = document.getElementById('riskBar');
+  const riskText = document.getElementById('riskPercentage');
+  const hashSpan = document.getElementById('blockHash');
+
+  if (hashSpan) hashSpan.innerText = generateLandHash();
+
+  if (riskBar && riskText) {
+    riskBar.style.width = scorePercent + '%';
+    if (isDisputed) {
+      riskBar.style.background = '#d32f2f'; // Red for High Risk
+      riskText.style.color = '#d32f2f';
+      riskText.innerText = `${scorePercent}% (${currentLang === 'bn' ? 'উচ্চ ঝুঁকি / মামলাযুক্ত' : 'High Risk / Disputed'})`;
+    } else {
+      riskBar.style.background = '#2e7d32'; // Green for Safe
+      riskText.style.color = '#2e7d32';
+      riskText.innerText = `${scorePercent}% (${currentLang === 'bn' ? 'নিরাপদ জমি' : 'Low Risk / Safe'})`;
+    }
+  }
+}

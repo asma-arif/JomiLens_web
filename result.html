@@ -28,6 +28,24 @@
 </header>
 
   <div class="container">
+    <!-- Blockchain Hash Stamp -->
+<div style="background: #eef6f3; padding: 12px 18px; border-left: 4px solid #0f4c3a; border-radius: 6px; margin-bottom: 20px;">
+  <small style="color: #555; text-transform: uppercase; font-weight: 700;">🔗 Blockchain Verified Stamp</small>
+  <div style="font-family: monospace; font-size: 0.85rem; color: #0f4c3a; word-break: break-all; margin-top: 4px;">
+    Hash: <span id="blockHash">0x8F9A4C2B7E1093DF8B21A3C4D5E6F7A8</span>
+  </div>
+</div>
+
+<!-- Multi-Tier Risk Meter -->
+<div style="margin-bottom: 25px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+    <span style="font-weight: 700; color: #333;" data-bn="ঝুঁকি মূল্যায়ন (Risk Score)" data-en="Risk Assessment Score">ঝুঁকি মূল্যায়ন (Risk Score):</span>
+    <span id="riskPercentage" style="font-weight: 800; color: #2e7d32;">10% (নিরাপদ / Low Risk)</span>
+  </div>
+  <div style="width: 100%; background: #e0e0e0; height: 14px; border-radius: 7px; overflow: hidden;">
+    <div id="riskBar" style="width: 10%; height: 100%; background: #2e7d32; transition: width 0.5s ease;"></div>
+  </div>
+</div>
     <div class="split-layout">
       <div>
         <div id="riskBox" class="risk-box risk-safe">

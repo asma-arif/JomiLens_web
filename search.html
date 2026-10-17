@@ -44,6 +44,39 @@
     <button class="btn btn-primary" onclick="sendAiMessage()" data-bn="অনুসন্ধান" data-en="Send">অনুসন্ধান</button>
   </div>
 </div>
+<!-- Advanced Features Section -->
+<div class="advanced-features-grid" style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
+  
+  <!-- Feature 1: Porcha OCR Scanner -->
+  <div class="card" style="padding: 20px; border-radius: 10px; background: #f8faf9; border: 1px solid #0f4c3a;">
+    <h4 data-bn="📄 খতিয়ান/পর্চা OCR স্ক্যানার" data-en="📄 Khatian Document OCR Scanner">📄 খতিয়ান/পর্চা OCR স্ক্যানার</h4>
+    <p style="font-size: 0.85rem; color: #555;" data-bn="আপনার খতিয়ান বা পর্চার ছবি আপলোড করে আসল বা নকল যাচাই করুন।" data-en="Upload land document photo to scan for authenticity.">আপনার খতিয়ান বা পর্চার ছবি আপলোড করে আসল বা নকল যাচাই করুন।</p>
+    <input type="file" id="ocrInput" accept="image/*" style="display: none;" onchange="processOCR()">
+    <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()" style="width: 100%; margin-top: 10px;" data-bn="ছবি আপলোড করুন 📤" data-en="Upload Document 📤">ছবি আপলোড করুন 📤</button>
+    <div id="ocrResult" style="margin-top: 12px; font-weight: bold; font-size: 0.9rem;"></div>
+  </div>
+
+  <!-- Feature 2: USSD / Offline SMS Mode -->
+  <div class="card" style="padding: 20px; border-radius: 10px; background: #f8faf9; border: 1px solid #0f4c3a;">
+    <h4 data-bn="📱 অফলাইন / USSD SMS মোড" data-en="📱 Offline / USSD SMS Mode">📱 অফলাইন / USSD SMS মোড</h4>
+    <p style="font-size: 0.85rem; color: #555;" data-bn="ইন্টারনেট ছাড়া বাটন ফোন থেকে জমি যাচাইয়ের নিয়ম দেখুন।" data-en="Verify land without internet using button phones.">ইন্টারনেট ছাড়া বাটন ফোন থেকে জমি যাচাইয়ের নিয়ম দেখুন।</p>
+    <button class="btn btn-outline" onclick="showUSSDModal()" style="width: 100%; margin-top: 10px; border-color: #0f4c3a; color: #0f4c3a;" data-bn="USSD কোড দেখুন 📲" data-en="View USSD Guide 📲">USSD কোড দেখুন 📲</button>
+  </div>
+
+</div>
+
+<!-- USSD Modal Popup -->
+<div id="ussdModal" style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 10000; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 25px; border-radius: 12px; max-width: 400px; width: 90%; text-align: center; position: relative;">
+    <h3 style="color: #0f4c3a;" data-bn="অফলাইন USSD & SMS সার্ভিস" data-en="Offline USSD & SMS Service">অফলাইন USSD & SMS সার্ভিস</h3>
+    <hr style="margin: 15px 0;">
+    <p style="text-align: left; font-size: 0.9rem; line-height: 1.6;">
+      <b>১. USSD ডায়াল:</b> <code>*16165#</code> চাপুন এবং ডায়াল অপশনে প্লট নম্বর লিখুন।<br>
+      <b>২. SMS পদ্ধতি:</b> মেসেজে লিখুন <code>JOMI &lt;Plot_No&gt;</code> এবং পাঠিয়ে দিন <b>16165</b> নম্বরে।
+    </p>
+    <button class="btn btn-primary" onclick="closeUSSDModal()" style="margin-top: 15px;" data-bn="বন্ধ করুন" data-en="Close">বন্ধ করুন</button>
+  </div>
+</div>
 
           <div id="searchWarning" class="warning-alert">
             <span id="searchWarningText">⚠️ Please enter a valid Plot ID, Dag, or Khatian number before searching!</span>

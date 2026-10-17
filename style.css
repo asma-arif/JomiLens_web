@@ -35,16 +35,16 @@ body {
 }
 
 .navbar {
-  background-color: var(--navy);
-  color: #FFFFFF;
-  padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
+  padding: 15px 30px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  flex-wrap: nowrap; /* অতিরিক্ত কন্টেন্ট যেন নিচে বা পাশে ভেঙে না যায় */
 }
 
 .brand {
@@ -52,7 +52,12 @@ body {
   align-items: center;
   gap: 12px;
   text-decoration: none;
-  color: white;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .logo-icon {

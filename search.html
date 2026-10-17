@@ -123,13 +123,13 @@
     <h4 data-bn="📄 খতিয়ান/পর্চা AI স্ক্যানার" data-en="📄 Khatian Document AI Scanner">📄 খতিয়ান/পর্চা AI স্ক্যানার</h4>
     <p style="font-size: 0.85rem; color: #555;" data-bn="সরাসরি ক্যামেরা দিয়ে ছবি তুলুন, গ্যালারি থেকে আপলোড করুন অথবা ডেমো টেস্ট করুন।" data-en="Capture live photo, upload from gallery, or test via demo.">সরাসরি ক্যামেরা দিয়ে ছবি তুলুন, গ্যালারি থেকে আপলোড করুন অথবা ডেমো টেস্ট করুন.</p>
     
-    <!-- Real Input Options (Camera & Gallery) -->
+    <!-- Camera & Gallery Real Upload Inputs -->
     <div style="display: flex; gap: 10px; margin-top: 10px;">
-      <!-- Gallery Upload Input -->
+      <!-- Gallery Upload Button -->
       <input type="file" id="galleryInput" accept="image/*" style="display: none;" onchange="handleRealUpload(event)">
       <button class="btn btn-outline" onclick="document.getElementById('galleryInput').click()" style="flex: 1; font-size: 0.8rem; border-color: #0f4c3a; color: #0f4c3a;" data-bn="📁 গ্যালারি থেকে" data-en="📁 Gallery">📁 গ্যালারি থেকে</button>
 
-      <!-- Direct Camera Capture Input -->
+      <!-- Live Camera Capture Button -->
       <input type="file" id="cameraInput" accept="image/*" capture="environment" style="display: none;" onchange="handleRealUpload(event)">
       <button class="btn btn-primary" onclick="document.getElementById('cameraInput').click()" style="flex: 1; font-size: 0.8rem;" data-bn="📸 ক্যামেরা দিয়ে তুলুন" data-en="📸 Live Camera">📸 ক্যামেরা দিয়ে তুলুন</button>
     </div>
@@ -144,7 +144,7 @@
       <option value="disputed" data-bn="📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)" data-en="📄 Demo 3: Disputed Khatian (#309 - Court Stay)">📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)</option>
     </select>
     
-    <!-- OCR Result Box -->
+    <!-- OCR Result Output -->
     <div id="ocrResult" style="margin-top: 12px; font-weight: bold; font-size: 0.85rem; line-height: 1.4;"></div>
   </div>
       </div>

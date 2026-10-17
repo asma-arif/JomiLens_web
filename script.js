@@ -1,3 +1,6 @@
+// ==========================================
+// 1. Mock Database
+// ==========================================
 const mockDatabase = {
   "PLOT-102": {
     plotId: "PLOT-102",
@@ -56,6 +59,9 @@ const mockDatabase = {
   }
 };
 
+// ==========================================
+// 2. Translations & Global State
+// ==========================================
 const translations = {
   en: {
     heroTitle: "Know the Land, Before You Buy.",
@@ -68,23 +74,23 @@ const translations = {
   },
   bn: {
     heroTitle: "জমি কেনার আগেই জানুন জমির আসল তথ্য।",
-    heroDesc: "বাংলাদেশের প্রথম এআই-চালিত নাগরিক ভুমি প্রাক-ক্রয় যাচাইকরণ প্ল্যাটফর্ম।",
+    heroDesc: "বাংলাদেশের প্রথম এআই-চালিত নাগরিক ভূমি প্রাক-ক্রয় যাচাইকরণ প্ল্যাটফর্ম।",
     searchBtn: "যাচাই করুন",
     searchPlaceholder: "প্লট আইডি লিখুন (যেমন: PLOT-102, PLOT-405, PLOT-909)",
-    warningText: "⚠️ অনুসন্ধানের আগে একটি বৈধ প্লট আইডি, দাগ বা খতিয়ান নম্বর প্রদান করুন!",
+    warningText: "⚠️ অনুসন্ধানের আগে একটি বৈধ প্লট আইডি, দাগ বা খতিয়ান নম্বর প্রদান করুন!",
     aiHeader: "জমিলেন্স এআই সহকারী",
-    aiWelcome: "হ্যালো! আমি আপনার জমিলেন্স আইনি সহকারী। খতিয়ান, নামজারি বা ভূমি বিষয়ক প্রশ্ন করতে পারেন।"
+    aiWelcome: "হ্যালো! আমি আপনার জমিলেন্স আইনি সহকারী। খতিয়ান, নামজারি বা ভূমি বিষয়ক প্রশ্ন করতে পারেন।"
   }
 };
 
-// Default Language is Bangla
-let currentLang = 'bn';
+let currentLang = 'bn'; // Default Language
 
-// Language Toggle Function
+// ==========================================
+// 3. Language Switching Functions
+// ==========================================
 function toggleLanguage() {
   currentLang = currentLang === 'bn' ? 'en' : 'bn';
   
-  // Button-er lekha poriborton
   const langBtn = document.getElementById('langBtn');
   if (langBtn) {
     langBtn.innerText = currentLang === 'bn' ? 'English' : 'বাংলা';
@@ -93,7 +99,6 @@ function toggleLanguage() {
   updatePageLanguage();
 }
 
-// Update Text on Page based on Language
 function updatePageLanguage() {
   const elements = document.querySelectorAll('[data-bn]');
   elements.forEach(el => {
@@ -105,15 +110,17 @@ function updatePageLanguage() {
   });
 }
 
-// Page load holei default vabe Bangla set hobe
 document.addEventListener('DOMContentLoaded', () => {
   updatePageLanguage();
   const langBtn = document.getElementById('langBtn');
   if (langBtn) {
-    langBtn.innerText = 'English';
+    langBtn.innerText = currentLang === 'bn' ? 'English' : 'বাংলা';
   }
 });
 
+// ==========================================
+// 4. Search Handler
+// ==========================================
 function handleSearch(plotIdInput) {
   const plotId = (plotIdInput || document.getElementById('searchInput')?.value || '').trim().toUpperCase();
   const warningBox = document.getElementById('searchWarning');
@@ -129,54 +136,19 @@ function handleSearch(plotIdInput) {
   window.location.href = 'result.html';
 }
 
-function sendAiMessage() {
-  const input = document.getElementById('chatInput');
-  const chatBox = document.getElementById('chatBox');
-  if (!input || !input.value.trim()) return;
-
-  const userMsg = input.value.trim();
-  
-  const userDiv = document.createElement('div');
-  userDiv.className = 'msg msg-user';
-  userDiv.innerText = userMsg;
-  chatBox.appendChild(userDiv);
-
-  input.value = '';
-  chatBox.scrollTop = chatBox.scrollHeight;
-
-  setTimeout(() => {
-    const botDiv = document.createElement('div');
-    botDiv.className = 'msg msg-bot';
-
-    const lower = userMsg.toLowerCase();
-    if (lower.includes('102') || lower.includes('safe')) {
-      botDiv.innerText = "PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain with clear mutation records.";
-    } else if (lower.includes('405') || lower.includes('dispute') || lower.includes('litigation')) {
-      botDiv.innerText = "WARNING: PLOT-405 has an active High Court Stay Order (Civil Suit #104/2022). Do not proceed without legal settlement.";
-    } else if (lower.includes('909') || lower.includes('govt') || lower.includes('acquired')) {
-      botDiv.innerText = "PLOT-909 is marked under Govt Gazette #881 for Metro Rail Expansion. It is not available for private transfer.";
-    } else {
-      botDiv.innerText = "Jomilens AI: You can check land title safety by entering PLOT-102 (Safe), PLOT-405 (Disputed), or PLOT-909 (Govt Acquired).";
-    }
-
-    chatBox.appendChild(botDiv);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }, 600);
-}
-// --- Voice Recognition & Text-to-Speech Features ---
-
-// ১. AI-এর মুখে কথা বলার ফাংশন (Text to Speech)
+// ==========================================
+// 5. Voice Recognition & Text-to-Speech
+// ==========================================
 function speakText(text) {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); // আগের কোনো কথা থাকলে তা বন্ধ করবে
+    window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US'; // ভাষা সেট করা
+    utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
     utterance.rate = 1.0;
     window.speechSynthesis.speak(utterance);
   }
 }
 
-// ২. ভয়েস শুনে কথা লেখার ফাংশন (Voice to Text)
 function startVoiceRecognition() {
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   
@@ -190,7 +162,7 @@ function startVoiceRecognition() {
   recognition.interimResults = false;
 
   const micBtn = document.getElementById('micBtn');
-  if (micBtn) micBtn.style.background = '#EF4444'; // মাইক চালু হলে লাল হবে
+  if (micBtn) micBtn.style.background = '#EF4444';
 
   recognition.start();
 
@@ -201,7 +173,7 @@ function startVoiceRecognition() {
       input.value = transcript;
     }
     if (micBtn) micBtn.style.background = 'var(--soft-green)';
-    sendAiMessage(); // কথা বলা শেষ হলে স্বয়ংক্রিয়ভাবে মেসেজ সেন্ড হয়ে যাবে
+    sendAiMessage();
   };
 
   recognition.onerror = function() {
@@ -213,7 +185,9 @@ function startVoiceRecognition() {
   };
 }
 
-// ৩. চ্যাট মেসেজ প্রসেসিং ও লোকেশন কমান্ড হ্যান্ডলিং (Updated sendAiMessage)
+// ==========================================
+// 6. Integrated AI Agent Core Logic
+// ==========================================
 function sendAiMessage() {
   const input = document.getElementById('chatInput');
   const chatBox = document.getElementById('chatBox');
@@ -221,7 +195,7 @@ function sendAiMessage() {
 
   const userMsg = input.value.trim();
   
-  // ইউজারের মেসেজ স্ক্রিনে দেখান
+  // Display User Message
   const userDiv = document.createElement('div');
   userDiv.className = 'msg msg-user';
   userDiv.innerText = userMsg;
@@ -237,44 +211,57 @@ function sendAiMessage() {
 
     const lower = userMsg.toLowerCase();
 
-    // যদি ইউজার লোকেশন/ম্যাপ দেখতে বলে
-    if (lower.includes('location') || lower.includes('map') || lower.includes('ম্যাপ') || lower.includes('লোকেশন')) {
-      replyText = "Opening interactive GPS boundary map for you right now.";
+    // 1. Map & Location Query Handling
+    if (lower.includes('location') || lower.includes('map') || lower.includes('ম্যাপ') || lower.includes('লোকেশন') || lower.includes('সীমানা')) {
+      replyText = currentLang === 'bn' 
+        ? "আপনার জন্য স্যাটেলাইট এবং জিপিএস ম্যাপ খোলা হচ্ছে..." 
+        : "Opening interactive GPS boundary map for you right now.";
       botDiv.innerText = replyText;
       chatBox.appendChild(botDiv);
       chatBox.scrollTop = chatBox.scrollHeight;
       
-      // AI কথা বলবে
       speakText(replyText);
 
-      // ২ সেকেন্ড পর স্বয়ংক্রিয়ভাবে Map পেজে নিয়ে যাবে
       setTimeout(() => {
         window.location.href = 'map.html';
       }, 2000);
       return;
     }
 
-    // সাধারণ অনুসন্ধানের ক্ষেত্রে AI এর উত্তর
-    if (lower.includes('102') || lower.includes('safe')) {
-      replyText = "PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain.";
-    } else if (lower.includes('405') || lower.includes('dispute')) {
-      replyText = "WARNING: PLOT-405 has an active High Court Stay Order. Do not proceed.";
-    } else if (lower.includes('909') || lower.includes('govt')) {
-      replyText = "PLOT-909 is marked under Govt Gazette for Metro Rail Expansion.";
+    // 2. Plot Status Query Handling
+    if (lower.includes('102') || lower.includes('৫০২') || lower.includes('safe')) {
+      replyText = currentLang === 'bn'
+        ? "✅ PLOT-102 সম্পূর্ণ নিরাপদ। এটি মোহাম্মদ তানভীর হোসেনের নামে নিবন্ধিত ও খতিয়ান হালনাগাদ রয়েছে।"
+        : "✅ PLOT-102 is completely SAFE. Ownership is verified under Mohammad Tanvir Hossain with clear mutation records.";
+    } else if (lower.includes('405') || lower.includes('১০৫') || lower.includes('dispute') || lower.includes('litigation') || lower.includes('মামলা')) {
+      replyText = currentLang === 'bn'
+        ? "🚨 সতর্কতা: PLOT-405 এ দেওয়ানি আদালতে (Civil Suit #104/2022) মামলা ও স্থগিতাদেশ চলছে। কেনা ঝুঁকিপূর্ণ।"
+        : "🚨 WARNING: PLOT-405 has an active High Court Stay Order (Civil Suit #104/2022). Do not proceed without legal settlement.";
+    } else if (lower.includes('909') || lower.includes('৩০৯') || lower.includes('govt') || lower.includes('acquired') || lower.includes('খাস')) {
+      replyText = currentLang === 'bn'
+        ? "⚠️ PLOT-909 মেট্রো রেল সম্প্রসারণের জন্য সরকারি গ্যাজেট #৮৮১ অনুযায়ী অধিগ্রহণকৃত সম্পত্তি।"
+        : "⚠️ PLOT-909 is marked under Govt Gazette #881 for Metro Rail Expansion. It is not available for private transfer.";
+    } else if (lower.includes('খতিয়ান') || lower.includes('পর্চা') || lower.includes('khatian') || lower.includes('porcha')) {
+      replyText = currentLang === 'bn'
+        ? "📄 খতিয়ান স্ট্যাটাস: ডাটাবেজে তথ্য পাওয়া গেছে। সম্পূর্ণ খতিয়ান স্ক্যান ও ভ্যালিডেশনের জন্য AI OCR ব্যবহার করুন।"
+        : "📄 Khatian Status: Record found in database. Use AI OCR Scanner to validate seals and signatures.";
     } else {
-      replyText = "JomiLens AI: You can ask about land safety, or say 'Show Location' to open GPS Map.";
+      replyText = currentLang === 'bn'
+        ? "🤖 জমিলেন্স এআই: আপনি প্লটের স্ট্যাটাস (যেমন: PLOT-102, 405, 909), খতিয়ান বিবরণ জানতে পারেন অথবা 'ম্যাপ দেখাও' বলতে পারেন।"
+        : "🤖 JomiLens AI: You can ask about land safety (e.g. PLOT-102, 405, 909), Khatian status, or say 'Show Location' to open GPS Map.";
     }
 
     botDiv.innerText = replyText;
     chatBox.appendChild(botDiv);
     chatBox.scrollTop = chatBox.scrollHeight;
 
-    // AI উত্তরটি মুখে উচ্চারণ করে বলবে
     speakText(replyText);
   }, 600);
 }
 
-// Handle Real Gallery or Camera Upload (Shows Smooth Demo Simulation)
+// ==========================================
+// 7. OCR Scanner Handlers
+// ==========================================
 function handleRealUpload(event) {
   const resultDiv = document.getElementById('ocrResult');
   if (!resultDiv) return;
@@ -287,70 +274,12 @@ function handleRealUpload(event) {
     setTimeout(() => {
       resultDiv.style.color = '#2e7d32';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ সফল স্ক্যান: দলিলটি সার্ভারে নিবন্ধিত এবং প্রাথমিক যাচাইয়ে বৈধ বলে চিহ্নিত।' 
-        : '✅ Successful Scan: Document registered on server and verified as valid.';
-    }, 1800);
-  }
-}
-
-// Handle Real Gallery or Camera Upload
-function handleRealUpload(event) {
-  const resultDiv = document.getElementById('ocrResult');
-  if (!resultDiv) return;
-
-  const file = event.target.files[0];
-  if (file) {
-    resultDiv.style.color = '#0f4c3a';
-    resultDiv.innerText = currentLang === 'bn' ? '⏳ আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : '⏳ Scanning uploaded image...';
-
-    setTimeout(() => {
-      resultDiv.style.color = '#2e7d32';
-      resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
-        : '✅ Successful Scan: Uploaded document registered on server and verified as valid.';
-    }, 1800);
-  }
-}
-
-// Handle Real Gallery or Camera Upload Simulation
-function handleRealUpload(event) {
-  const resultDiv = document.getElementById('ocrResult');
-  if (!resultDiv) return;
-
-  const file = event.target.files[0];
-  if (file) {
-    resultDiv.style.color = '#0f4c3a';
-    resultDiv.innerText = currentLang === 'bn' ? '⏳ আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : '⏳ Scanning uploaded image...';
-
-    setTimeout(() => {
-      resultDiv.style.color = '#2e7d32';
-      resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
-        : '✅ Successful Scan: Uploaded document registered on server and verified as valid.';
-    }, 1800);
-  }
-}
-
-// Single Box Handler for Real Image Uploads
-function handleRealUpload(event) {
-  const resultDiv = document.getElementById('ocrResult');
-  if (!resultDiv) return;
-
-  const file = event.target.files[0];
-  if (file) {
-    resultDiv.style.color = '#0f4c3a';
-    resultDiv.innerText = currentLang === 'bn' ? '⏳ আপনার আপলোড করা ছবি স্ক্যান করা হচ্ছে...' : '⏳ Scanning uploaded image...';
-
-    setTimeout(() => {
-      resultDiv.style.color = '#2e7d32';
-      resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
+        ? '✅ সফল স্ক্যান: আপলোডকৃত দলিলটি সার্ভারে নিবন্ধিত এবং সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
         : '✅ Successful Scan: Uploaded document registered on server and verified as valid.';
     }, 1600);
   }
 }
 
-// Single Box Handler for Demo Selection
 function processDemoOCR() {
   const selectBox = document.getElementById('demoPorchaSelect');
   const resultDiv = document.getElementById('ocrResult');
@@ -367,23 +296,25 @@ function processDemoOCR() {
     if (selectedValue === 'genuine') {
       resultDiv.style.color = '#2e7d32';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '✅ ফলাফল: খতিয়ান #৫০২ শতভাগ আসল। সিল ও স্বাক্ষর ভ্যালিডেটেড।' 
+        ? '✅ ফলাফল: খতিয়ান #৫০২ শতভাগ আসল। সিল ও স্বাক্ষর ভ্যালিডেটেড।' 
         : '✅ Result: Khatian #502 is 100% Genuine. Seal & Signature Validated.';
     } else if (selectedValue === 'tampered') {
       resultDiv.style.color = '#d32f2f';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '❌ সতর্কতা: খতিয়ান #১০৫ এ অসঙ্গতি পাওয়া গেছে! দাগ নম্বর টেম্পারড বা এডিট করা।' 
+        ? '❌ সতর্কতা: খতিয়ান #১০৫ এ অসঙ্গতি পাওয়া গেছে! দাগ নম্বর টেম্পারড বা এডিট করা।' 
         : '❌ Alert: Khatian #105 shows tampering! Plot numbers modified.';
     } else if (selectedValue === 'disputed') {
       resultDiv.style.color = '#e65100';
       resultDiv.innerText = currentLang === 'bn' 
-        ? '⚠️ উচ্চ ঝুঁকি: খতিয়ান #৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
+        ? '⚠️ উচ্চ ঝুঁকি: খতিয়ান #৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
         : '⚠️ High Risk: Khatian #309 has a pending case in Land Survey Tribunal.';
     }
   }, 1200);
 }
 
-// USSD Modal Functions
+// ==========================================
+// 8. USSD Modal & Utilities
+// ==========================================
 function showUSSDModal() {
   const modal = document.getElementById('ussdModal');
   if (modal) modal.style.display = 'flex';
@@ -394,8 +325,7 @@ function closeUSSDModal() {
   if (modal) modal.style.display = 'none';
 }
 
-// Dynamic Hash Generator for Blockchain Stamp
-function generateLandHash(plotNo) {
+function generateLandHash() {
   let hash = '0x';
   const chars = '0123456789ABCDEF';
   for (let i = 0; i < 32; i++) {
@@ -404,7 +334,6 @@ function generateLandHash(plotNo) {
   return hash;
 }
 
-// Result Update Helper for Risk Score Meter
 function updateRiskMeter(scorePercent, isDisputed) {
   const riskBar = document.getElementById('riskBar');
   const riskText = document.getElementById('riskPercentage');
@@ -415,11 +344,11 @@ function updateRiskMeter(scorePercent, isDisputed) {
   if (riskBar && riskText) {
     riskBar.style.width = scorePercent + '%';
     if (isDisputed) {
-      riskBar.style.background = '#d32f2f'; // Red for High Risk
+      riskBar.style.background = '#d32f2f';
       riskText.style.color = '#d32f2f';
       riskText.innerText = `${scorePercent}% (${currentLang === 'bn' ? 'উচ্চ ঝুঁকি / মামলাযুক্ত' : 'High Risk / Disputed'})`;
     } else {
-      riskBar.style.background = '#2e7d32'; // Green for Safe
+      riskBar.style.background = '#2e7d32';
       riskText.style.color = '#2e7d32';
       riskText.innerText = `${scorePercent}% (${currentLang === 'bn' ? 'নিরাপদ জমি' : 'Low Risk / Safe'})`;
     }

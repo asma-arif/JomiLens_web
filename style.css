@@ -504,3 +504,28 @@ html, body {
 #langBtn:hover {
   background-color: #0a3528;
 }
+
+/* Mobile Screen Overflow & Responsiveness Fix */
+html, body {
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+}
+
+@media screen and (max-width: 768px) {
+    .container, .chat-container, .ocr-card, .search-box {
+        width: 95% !important;
+        max-width: 100% !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+    }
+
+    /* ফোনে বাটন ও চ্যাট বক্সের সাইজ ঠিক করার জন্য */
+    #chatBox {
+        max-height: 350px !important;
+        overflow-y: auto !important;
+    }
+    
+    input, select, button {
+        font-size: 15px !important;
+    }
+}

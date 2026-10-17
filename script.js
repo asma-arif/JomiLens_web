@@ -137,24 +137,33 @@ function handleSearch(plotIdInput) {
 }
 
 // ==========================================
-// 5. Voice Recognition & Clean Text-to-Speech
+// Fixed Text-to-Speech for Laptop/PC Browsers
 // ==========================================
 function speakText(text) {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel(); // আগের কোনো সাউন্ড চালু থাকলে বন্ধ করবে
+    // আগের যেকোনো অডিও বন্ধ করা
+    window.speechSynthesis.cancel();
     
-    // ইমোজি, স্টিকার ও অনাকাঙ্ক্ষিত সাইরেন বা টিক চিহ্ন ফিল্টার করার লজিক
+    // ইমোজি ও সিম্বল ফিল্টার করা
     let cleanSpeechText = text
       .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{2300}-\u{23FF}]/gu, '')
-      .replace(/[✅🚨⚠️❌🟢🔴🟠📄🤖🔍]/g, '') // ইমোজি উচ্চারণ বন্ধের ফিল্টার
+      .replace(/[✅🚨⚠️❌🟢🔴🟠📄🤖🔍]/g, '')
       .trim();
 
     const utterance = new SpeechSynthesisUtterance(cleanSpeechText);
-    utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
-    utterance.rate = 0.95; // স্পষ্ট শোনার জন্য সামান্য ধীর গতি
-    utterance.pitch = 1.0;
     
+    // ল্যাপটপে ভাষা সেট (বাংলা না পেলে ডিফল্ট ইংলিশ বা ব্রাউজারের ভাষা নেবে)
+    utterance.lang = currentLang === 'bn' ? 'bn-BD' : 'en-US';
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+
+    // 💡 ক্রোম ব্রাউজারের বাগ ফিক্স করার জন্য গ্লোবালি সেভ রাখা জরুরি
+    window.speechUtteranceInstance = utterance;
+
+    // ভয়েস প্লে করা
     window.speechSynthesis.speak(utterance);
+  } else {
+    console.warn("Speech Synthesis is not supported in this browser.");
   }
 }
 

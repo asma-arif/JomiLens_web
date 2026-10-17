@@ -274,20 +274,42 @@ function sendAiMessage() {
   }, 600);
 }
 
-// OCR Scanning Simulation Function
-function processOCR() {
+// Demo OCR Processing Function
+function processDemoOCR() {
+  const selectBox = document.getElementById('demoPorchaSelect');
   const resultDiv = document.getElementById('ocrResult');
-  if (!resultDiv) return;
+  
+  if (!selectBox || !resultDiv) return;
+
+  const selectedValue = selectBox.value;
+
+  if (!selectedValue) {
+    resultDiv.style.color = '#d32f2f';
+    resultDiv.innerText = currentLang === 'bn' ? '⚠️ অনুগ্রহ করে যেকোনো একটি ডেমো পর্চা সিলেক্ট করুন।' : '⚠️ Please select a demo khatian sample first.';
+    return;
+  }
 
   resultDiv.style.color = '#0f4c3a';
-  resultDiv.innerText = currentLang === 'bn' ? '⏳ পর্চা স্ক্যান করা হচ্ছে...' : '⏳ Scanning Document...';
+  resultDiv.innerText = currentLang === 'bn' ? '⏳ AI OCR দ্বারা পর্চা বিশ্লেষণ করা হচ্ছে...' : '⏳ Analyzing document via AI OCR...';
 
   setTimeout(() => {
-    resultDiv.style.color = '#2e7d32';
-    resultDiv.innerText = currentLang === 'bn' 
-      ? '✅ স্ক্যান সম্পন্ন: খতিয়ান নম্বর #502 স্বত্বাধিকারী সত্যতা যাচাইকৃত (আসল খতিয়ান)।' 
-      : '✅ Scan Complete: Khatian #502 Authenticity Verified (Genuine Document).';
-  }, 2000);
+    if (selectedValue === 'genuine') {
+      resultDiv.style.color = '#2e7d32';
+      resultDiv.innerText = currentLang === 'bn' 
+        ? '✅ ফলাফল: খতিয়ান #৫০২ শতভাগ আসল। সিল ও স্বাক্ষর ভ্যালিডেটেড।' 
+        : '✅ Result: Khatian #502 is 100% Genuine. Seal & Signature Validated.';
+    } else if (selectedValue === 'tampered') {
+      resultDiv.style.color = '#d32f2f';
+      resultDiv.innerText = currentLang === 'bn' 
+        ? '❌ সতর্কতা: খতিয়ান #১০৫ এ অসঙ্গতি পাওয়া গেছে! দাগ নম্বর টেম্পারড বা এডিট করা।' 
+        : '❌ Alert: Khatian #105 shows tampering! Plot numbers modified.';
+    } else if (selectedValue === 'disputed') {
+      resultDiv.style.color = '#e65100';
+      resultDiv.innerText = currentLang === 'bn' 
+        ? '⚠️ উচ্চ ঝুঁকি: খতিয়ান #৩০৯ এর ওপর ল্যান্ড সার্ভে ট্রাইব্যুনালে মামলা চলমান।' 
+        : '⚠️ High Risk: Khatian #309 has a pending case in Land Survey Tribunal.';
+    }
+  }, 1500);
 }
 
 // USSD Modal Functions

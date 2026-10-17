@@ -47,13 +47,24 @@
 <!-- Advanced Features Section -->
 <div class="advanced-features-grid" style="margin-top: 30px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
   
-  <!-- Feature 1: Porcha OCR Scanner -->
+  <!-- Feature 1: Porcha OCR Scanner with Demo Samples -->
   <div class="card" style="padding: 20px; border-radius: 10px; background: #f8faf9; border: 1px solid #0f4c3a;">
     <h4 data-bn="📄 খতিয়ান/পর্চা OCR স্ক্যানার" data-en="📄 Khatian Document OCR Scanner">📄 খতিয়ান/পর্চা OCR স্ক্যানার</h4>
-    <p style="font-size: 0.85rem; color: #555;" data-bn="আপনার খতিয়ান বা পর্চার ছবি আপলোড করে আসল বা নকল যাচাই করুন।" data-en="Upload land document photo to scan for authenticity.">আপনার খতিয়ান বা পর্চার ছবি আপলোড করে আসল বা নকল যাচাই করুন।</p>
-    <input type="file" id="ocrInput" accept="image/*" style="display: none;" onchange="processOCR()">
-    <button class="btn btn-primary" onclick="document.getElementById('ocrInput').click()" style="width: 100%; margin-top: 10px;" data-bn="ছবি আপলোড করুন 📤" data-en="Upload Document 📤">ছবি আপলোড করুন 📤</button>
-    <div id="ocrResult" style="margin-top: 12px; font-weight: bold; font-size: 0.9rem;"></div>
+    <p style="font-size: 0.85rem; color: #555;" data-bn="ডেমো পর্চা সিলেক্ট করে স্ক্যান করুন বা নিজের ছবি আপলোড করুন।" data-en="Select a demo khatian sample or upload your own.">ডেমো পর্চা সিলেক্ট করে স্ক্যান করুন বা নিজের ছবি আপলোড করুন।</p>
+    
+    <!-- Demo Samples Dropdown -->
+    <select id="demoPorchaSelect" style="width: 100%; padding: 8px; margin-top: 8px; border-radius: 5px; border: 1px solid #ccc; font-size: 0.9rem;">
+      <option value="" data-bn="-- একটি ডেমো পর্চা বেছে নিন --" data-en="-- Select a Demo Khatian --">-- একটি ডেমো পর্চা বেছে নিন --</option>
+      <option value="genuine" data-bn="📄 ডেমো ১: আসল খতিয়ান (#৫০২ - নিরাপদ)" data-en="📄 Demo 1: Genuine Khatian (#502 - Safe)">📄 ডেমো ১: আসল খতিয়ান (#৫০২ - নিরাপদ)</option>
+      <option value="tampered" data-bn="📄 ডেমো ২: জালিয়াতি করা খতিয়ান (#১০৫ - ভুয়া)" data-en="📄 Demo 2: Tampered Khatian (#105 - Forged)">📄 ডেমো ২: জালিয়াতি করা খতিয়ান (#১০৫ - ভুয়া)</option>
+      <option value="disputed" data-bn="📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)" data-en="📄 Demo 3: Disputed Khatian (#309 - Court Stay)">📄 ডেমো ৩: মামলাযুক্ত খতিয়ান (#৩০৯ - হাইকোর্ট স্থগিতাদেশ)</option>
+    </select>
+
+    <!-- Scan Button -->
+    <button class="btn btn-primary" onclick="processDemoOCR()" style="width: 100%; margin-top: 10px;" data-bn="পর্চা স্ক্যান করুন 🔍" data-en="Scan Document 🔍">পর্চা স্ক্যান করুন 🔍</button>
+    
+    <!-- OCR Result Box -->
+    <div id="ocrResult" style="margin-top: 12px; font-weight: bold; font-size: 0.85rem; line-height: 1.4;"></div>
   </div>
 
   <!-- Feature 2: USSD / Offline SMS Mode -->

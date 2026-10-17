@@ -34,17 +34,18 @@ body {
   flex-direction: column;
 }
 
+/* --- High Contrast Navbar Styling --- */
 .navbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 30px;
+  padding: 14px 28px;
   background-color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
-  position: relative;
+  border-bottom: 2px solid #0f4c3a; /* Deep Emerald line for contrast */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   width: 100%;
   box-sizing: border-box;
-  flex-wrap: nowrap; /* অতিরিক্ত কন্টেন্ট যেন নিচে বা পাশে ভেঙে না যায় */
+  flex-wrap: nowrap;
 }
 
 .brand {
@@ -80,33 +81,36 @@ body {
 }
 
 .brand-text h1 {
-  font-size: 1.4rem;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #0f4c3a; /* High Contrast Deep Emerald */
+  margin: 0;
+  line-height: 1.1;
 }
 
 .brand-text p {
-  font-size: 0.75rem;
-  color: #94A3B8;
-  font-style: italic;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #2d3748; /* Dark Grey for sharp readability */
+  margin: 3px 0 0 0;
 }
 
 .nav-links {
   display: flex;
-  gap: 20px;
   align-items: center;
+  gap: 22px;
 }
 
 .nav-links a {
-  color: #E2E8F0;
   text-decoration: none;
-  font-weight: 500;
-  font-size: 0.95rem;
-  transition: color 0.2s;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1a202c; /* High contrast text color */
+  transition: color 0.2s ease-in-out;
 }
 
 .nav-links a:hover {
-  color: var(--soft-green);
+  color: #0f4c3a;
 }
 
 .lang-switch {
@@ -484,4 +488,19 @@ html, body {
     opacity: 0;
     visibility: hidden;
   }
+}
+
+#langBtn {
+  background-color: #0f4c3a;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#langBtn:hover {
+  background-color: #0a3528;
 }
